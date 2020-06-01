@@ -1,0 +1,2 @@
+# mamp
+Maya Publish
