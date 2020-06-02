@@ -13,6 +13,7 @@ class CollectModel(pyblish.api.ContextPlugin):
     hosts = ["maya"]
 
     def process(self, context):
+        import os
         from maya import cmds
 
         name, family = "roebuck", "mam.model"

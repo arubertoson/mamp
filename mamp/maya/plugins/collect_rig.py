@@ -13,6 +13,7 @@ class CollectRig(pyblish.api.ContextPlugin):
     hosts = ["maya"]
 
     def process(self, context):
+        import os
         from maya import cmds
 
         name, family = "roebuck", "mam.rig"
