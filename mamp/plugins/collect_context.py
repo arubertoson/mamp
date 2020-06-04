@@ -1,10 +1,14 @@
 import pyblish.api
 
 
-class CollectMamContext(pyblish.api.ContextPlugin):
-    """Inject current asset context into pyblish context."""
+class CollectAssetContext(pyblish.api.ContextPlugin):
+    """Inject Asset Context
 
-    label = "Mam Asset Context"
+    Will collect the active environment context.
+
+    """
+
+    label = "Asset Context"
     order = pyblish.api.CollectorOrder - 0.5
     hosts = ["*"]
 
@@ -16,8 +20,13 @@ class CollectMamContext(pyblish.api.ContextPlugin):
         shot = os.environ["MAM_CTX_SHOT"]
         step = os.environ["MAM_CTX_STEP"]
 
-        self.log.info("Trying to set context data... {shot}".format(shot))
+
+        context.data["app"] = "maya"
+
         context.set_data("project", value=project)
         context.set_data("sequence", value=sequence)
         context.set_data("shot", value=shot)
         context.set_data("step", value=step)
+
+        context.set_data("label", value="{shot}".format(**locals()))
+        

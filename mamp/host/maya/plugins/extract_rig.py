@@ -5,8 +5,9 @@ import pyblish.api
 
 class ExtractRig(pyblish.api.InstancePlugin):
 
+    label = "MAM Rig"
     order = pyblish.api.ExtractorOrder
-    families = ["mam.rig"]
+    families = ["rig"]
 
     def process(self, instance):
         import os

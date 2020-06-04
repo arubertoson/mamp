@@ -10,21 +10,25 @@ class CmdOption:
         self._filename = name+"."+self._ext 
         self._path = os.path.join(path, self._filename)
 
+    def __str__(self):
+        return " ".join(self._cmd).format(**self.__dict__).replace("\\", "/")
+
     @property
     def path(self):
         return self._path
 
     @property
-    def filename(self):)
+    def filename(self):
         return self._filename
 
+    @property
     def cmd(self):
-        return " ".join(self._cmd).format(**self.__dict__)
+        return self.__str__()
 
 
 class OgreMeshOption(CmdOption):
 
-    _cmd_string = '-mesh "{_path}" -version "{_version}"'
+    _cmd_string = '-version {_version} -mesh "{_path}"'
     _ext = "mesh"
 
     # Defaults
@@ -48,13 +52,8 @@ class OgreSkelOption(CmdOption):
     _cmd_string = '-skel "{_path}"'
     _ext = "skeleton"
 
-    def __init__(self, name, path=""):
-        super(OgreSkelOption, self).__init__(name, path)
-
-        self.skel_anim = False
-
     def with_skeleton_anims(self):
-        if self.skel_anim:
+        if hasattr(self, "skel_anim") and self.skel_anim:
             return
 
         self.skel_anim = True
@@ -82,13 +81,13 @@ class OgreMaterialOption(CmdOption):
 
 class OgreCommand(CmdOption):
 
-    _cmd_string = (
-        "ogreExporter "
-        "-{_export_selected} "
-        "-lu {_unit_of_measure} "
-        "-{_coord_system} "
-        "-scale {_scale}"
-    )
+    _cmd_string = " ".join([
+        "ogreExport",
+        "-{_export_selected}",
+        "-{_coord_system}",
+        "-lu {_unit_of_measure}",
+        "-scale {_scale}",
+    ])
 
     def __init__(self, executor):
 
@@ -102,12 +101,21 @@ class OgreCommand(CmdOption):
         self._scale = 1.0
 
     def add_option(self, option):
-        self._cmd.append(option.cmd())
+        self._cmd.append(option.cmd)
 
     def execute(self):
         """
         """
-        self._exec(self.cmd())
+        self._exec(str(self))
+
+    def execute_with(self, *args):
+        command = " ".join([str(self)] + [str(_) for _ in args])
+        try:
+            self._exec(command)
+        except RuntimeError:
+            pass
+
+        return command
 
 
 def testo(instr):

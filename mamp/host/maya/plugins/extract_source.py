@@ -1,18 +1,28 @@
 """
 """
+import os
 import pyblish.api
 
+def ensure_dir_exists(dirname):
+    """
+    """
+    try:
+        os.makedirs(dirname)
+    except OSError:
+        pass
 
 class ExtractSource(pyblish.api.InstancePlugin):
+    """Bla bla
 
-    label = "MAM Source"
+    Some words
+    """
+
+    label = "Source File"
     order = pyblish.api.ExtractorOrder
     host = ["maya"]
-    families = [
-        "mam.model",
-        "mam.rig",
-        "mam.anim",
-    ]
+    optional = True
+    active = False
+    target = ["anim.comp"]
 
     def process(self, instance):
         import os
@@ -20,16 +30,18 @@ class ExtractSource(pyblish.api.InstancePlugin):
         from maya import cmds
         from pyblish_maya import maintained_selection
 
-        datatype = "mb"
+        shot = instance.context.data["shot"]
+        family, subfam = instance.data["family"].split(".", 1)[0], instance.data["family"]
+
+        if not subfam:
+            subfam = family
 
         # Make sure our stagedir exists
-        dirname = os.path.join(instance.data["stage_dir"], datatype)
-        try:
-            os.makedirs(dirname)
-        except OSError:
-            pass
+        dirname = instance.data["stage_dir"]
+        ensure_dir_exists(dirname)
 
-        filename = "{shot}.{datatype}".format(instance.context.data["shot"], datatype)
+        # XXX: Please reference the family name
+        filename = "{shot}_{subfam}.ma".format(**locals())
 
         path = os.path.join(dirname, filename)
 
@@ -37,7 +49,7 @@ class ExtractSource(pyblish.api.InstancePlugin):
             cmds.select(instance, noExpand=True)
             cmds.file(path,
                 force=True,
-                type="mayaBinary",
+                type="mayaAscii",
                 exportSelected=True,
                 preserveReferences=True,
                 constructionHistory=False,

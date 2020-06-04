@@ -1,2 +1,6 @@
+__pycache__
 .envrc
 .vim
+.mypy_cache
+
+*.pyc
