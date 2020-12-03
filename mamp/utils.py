@@ -2,6 +2,7 @@
 mamp utility module
 
 """
+import os
 import logging
 import functools
 
@@ -38,3 +39,19 @@ def ensure_single_run(fn=None, clear=False):
         return decorator(fn)
     else:
         return decorator
+
+
+def ensure_output_dir(path):
+    try:
+        os.makedirs(path)
+    except OSError:
+        pass
+
+def increment_version_at(dirname):
+    versions = [0]
+    try:
+        versions = [int(ver[1:]) for ver in os.listdir(dirname)]
+    except OSError:
+        pass
+
+    return os.path.join(dirname, "v{:03d}".format(max(versions)+1))
