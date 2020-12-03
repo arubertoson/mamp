@@ -8,14 +8,19 @@ class CmdOption:
         self._cmd = [self._cmd_string]
 
         self._filename = name+"."+self._ext 
-        self._path = os.path.join(path, self._filename)
+        self._dirname = path
+        self._fullpath = os.path.join(path, self._filename)
 
     def __str__(self):
         return " ".join(self._cmd).format(**self.__dict__).replace("\\", "/")
 
     @property
-    def path(self):
-        return self._path
+    def dirname(self):
+        return self._dirname
+
+    @property
+    def fullpath(self):
+        return self._fullpath
 
     @property
     def filename(self):
@@ -28,7 +33,7 @@ class CmdOption:
 
 class OgreMeshOption(CmdOption):
 
-    _cmd_string = '-version {_version} -mesh "{_path}"'
+    _cmd_string = '-version {_version} -mesh "{_fullpath}"'
     _ext = "mesh"
 
     # Defaults
@@ -49,7 +54,7 @@ class OgreMeshOption(CmdOption):
 
 class OgreSkelOption(CmdOption):
 
-    _cmd_string = '-skel "{_path}"'
+    _cmd_string = '-skel "{_fullpath}"'
     _ext = "skeleton"
 
     def with_skeleton_anims(self):
@@ -69,7 +74,7 @@ class OgreSkelOption(CmdOption):
 
 class OgreMaterialOption(CmdOption):
 
-    _cmd_string = '-mat "{_path}"'
+    _cmd_string = '-mat "{_fullpath}"'
     _ext = "material"
 
     def with_prefix(self, prefix):

@@ -20,9 +20,6 @@ class CollectAssetContext(pyblish.api.ContextPlugin):
         shot = os.environ["MAM_CTX_SHOT"]
         step = os.environ["MAM_CTX_STEP"]
 
-
-        context.data["app"] = "maya"
-
         context.set_data("project", value=project)
         context.set_data("sequence", value=sequence)
         context.set_data("shot", value=shot)

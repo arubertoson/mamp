@@ -28,8 +28,8 @@ class CollectMamMayaCurrentFile(pyblish.api.ContextPlugin):
 
         # Inject the current working file
         current_file = cmds.file(sceneName=True, query=True)
-        #
-        # # Maya returns forward-slashes by default
+        
+        # Maya returns forward-slashes by default
         scene = os.path.basename(current_file)
         normalised = os.path.normpath(current_file)
         

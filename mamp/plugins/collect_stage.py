@@ -9,6 +9,6 @@ class CollectStageDir(pyblish.api.ContextPlugin):
 
     def process(self, context):
         # XXX Should be handled by other service
-        stage = "g:/project/{project}/assets/{sequence}/{shot}/stage/{step}/{app}".format(**context.data)
+        stage = "g:/project/{project}/assets/{sequence}/{shot}/stage/{step}".format(**context.data)
 
         context.set_data("stage_dir", value=stage)

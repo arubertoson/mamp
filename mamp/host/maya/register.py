@@ -42,7 +42,7 @@ def _configure_qml():
     # QML Settings
     settings.WindowSize = (width / 3, height / 3)
     settings.WindowPosition = (width / 6, height / 6)
-    settings.HiddenSections = ["Collect", "Extract", "Other"]
+    settings.HiddenSections = ["Collect", "Extract", "Other", "source"]
 
 
 def _register_plugins():
