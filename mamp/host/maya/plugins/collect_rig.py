@@ -50,4 +50,6 @@ class CollectRig(pyblish.api.ContextPlugin):
             instance.data["geo"] = [v] + static
 
             # Everything that is part of the rig will be selectable
+            instance.data["members"] = [v, "|all|rig"] + static
+
             instance[:] = [v, "|all|rig"] + static
