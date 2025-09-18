@@ -55,8 +55,11 @@ class ExtractOgreRig(pyblish.api.InstancePlugin):
 
         self.log.debug("Ogre Command: {}".format(command))
 
+        # XXX: keeping this here as an idea for a callout, it's a nasty side effect but meh.
+        # result = subprocess.call(["ogrmm", mesh.fullpath, "--skeleton", skel.fullpath, "--output", mesh.fullpath])
+        # if result > 0:
+        #     self.log.warning("Failed to assign skeleton file: {} to mesh {}".format(skel.fullpath, mesh.fullpath))
+
         instance.data["files"].append(mat.filename)
         instance.data["files"].append(mesh.filename)
         instance.data["files"].append(skel.filename)
-
-
