@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# ------------------------------------------------------------------------------- 
+# Cli
+# ------------------------------------------------------------------------------- 
+maya="/mnt/c/Program Files/Autodesk/Maya2017/bin/maya.exe"
+workdir=$(pwd)
+
+shot=$1
+step=$2
+
+# ------------------------------------------------------------------------------- 
+# Environment
+# ------------------------------------------------------------------------------- 
+export MAM_CTX_PROJECT="marksman"
+export MAM_CTX_SEQUENCE="char"
+export MAM_CTX_SHOT=${shot}
+export MAM_CTX_STEP=${step}
+
+root="/mnt/g/project/${MAM_CTX_PROJECT}"
+asset="assets/${MAM_CTX_SEQUENCE}/${MAM_CTX_SHOT}"
+workspace="work/${MAM_CTX_STEP}/maya"
+fullpath="${root}/${asset}/${workspace}"
+
+if [[ ! -d ${fullpath} ]]; then
+    echo "${fullpath} is not a valid asset path..."
+
+    exit
+fi
+
+# ------------------------------------------------------------------------------- 
+# Dev Environment
+# ------------------------------------------------------------------------------- 
+PYTHON_QML_BASE=/mnt/c/Users/marcu/scoop/apps/python/current
+PYTHON_QML_SITE_PACKAGES=/mnt/c/Users/marcu/scoop/apps/python27/current/Lib/site-packages
+PYBLISH_QML_PYTHON_EXECUTABLE="${PYTHON_QML_BASE}/python.exe"
+
+PYTHONPATH="${PYTHON_QML_SITE_PACKAGES}"
+
+# Maya dev env
+PYROOT="/mnt/c/scratch/dev/other/python"
+
+PYTHONPATH="${PYTHONPATH}:${PYROOT}/mamt/scripts"
+PYTHONPATH="${PYTHONPATH}:${PYROOT}/mamp"
+PYTHONPATH="${PYTHONPATH}:${PYROOT}/qthotkeys"
+PYTHONPATH="${PYTHONPATH}:${PYROOT}/maya-mamprefs"
+PYTHONPATH="${PYTHONPATH}:${PYROOT}/maya_startup"
+
+export PYTHONPATH
+
+# ------------------------------------------------------------------------------- 
+# WSL Translation
+# ------------------------------------------------------------------------------- 
+WSLENV="$WSLENV:MAM_CTX_PROJECT/w:MAM_CTX_SEQUENCE/w:MAM_CTX_SHOT/w:MAM_CTX_STEP/w"
+WSLENV="${WSLENV}:PYBLISH_QML_PYTHON_EXECUTABLE/p:PYTHONPATH/wl"
+
+# ------------------------------------------------------------------------------- 
+# Command
+# ------------------------------------------------------------------------------- 
+# if [[ ! length > 1 ]]; then
+#     cmd="$maya" $(wslpath -w ${workdir}/${@: -1})
+# else
+#     cmd="$maya"
+# fi
+
+# echo ${fullpath}
+
+# -------------------------------------------------------------------------------
+cd ${fullpath} && WSLENV=$WSLENV "$maya" &
+# cd ${fullpath} && WSLENV=$WSLENV /mnt/c/Windows/System32/cmd.exe
